@@ -1,5 +1,5 @@
 
-class room:
+class Room:
     def __init__(self, name, id, floor, m2):
         self.name=name
         self.id=id
@@ -32,3 +32,7 @@ class room:
         self.sensors.append(sensor)
     def removeSensor(self,sensor):
         self.sensors.remove(sensor)
+
+    def __str__(self):
+        s= "\t" +str(self.id) + ") " + self.name + "(" + str(self.floor) +". floor)"
+        return s
