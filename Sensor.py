@@ -1,10 +1,10 @@
 
 class Sensor:
-    def __init__(self, name, id, kind, value):
+    def __init__(self, name, id, kind):
         self.name=name
         self.id=id
         self.kind=kind
-        self.value=value
+        self.value=None
         # self.last100values=Queue.Queue()
         self.last100values=list()
         pass
