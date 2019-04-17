@@ -1,6 +1,7 @@
 import Building
 from Building import Building
 from Room import Room
+from Sensor import Sensor
 import Sensor
 class Service:
     def __init__(self):
@@ -40,6 +41,9 @@ class Service:
     def initRooms(self):
         pass
 
+    def createSensorsForRoom(self,room):
+        Sensor("Temperature",)
+
 def main():
     service = Service()
     service.initBuildings()
@@ -47,6 +51,7 @@ def main():
 
     service.createRoom(1,"Mr. Pinarer", 1, 15)
     print(service.buildings[0])
+
 
 if __name__ == '__main__':
     main()
