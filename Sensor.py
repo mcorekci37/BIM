@@ -39,3 +39,8 @@ class Sensor:
         return self.value
     def setValue(self,value):
         self.value=value
+
+    def __str__(self):
+        s= "\t" +str(self.id) + ") " + self.name + "(" + str(self.kind) +")"
+        return s
+

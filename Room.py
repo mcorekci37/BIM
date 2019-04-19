@@ -28,6 +28,12 @@ class Room:
     def setM2(self,m2):
         self.m2=m2
 
+    def getSensors(self):
+        return self.sensors
+
+    def setSensors(self,sensors):
+        self.sensors=sensors
+
     def addSensor(self,sensor):
         self.sensors.append(sensor)
     def removeSensor(self,sensor):
@@ -35,4 +41,7 @@ class Room:
 
     def __str__(self):
         s= "\t" +str(self.id) + ") " + self.name + "(" + str(self.floor) +". floor)"
+        for sen in self.sensors:
+            s+="\n\t"
+            s+=str(sen)
         return s

@@ -8,7 +8,7 @@ import Building
 from Building import Building
 from Room import Room
 from Sensor import Sensor
-import Sensor
+# import Sensor
 import arayuz_v1 as arayuz
 
 
@@ -29,6 +29,12 @@ class Service:
     def findBuildingByid(self,bid):
         for b in self.buildings:
             if b.id==bid:
+                return b
+        return None
+
+    def findBuildingByName(self,bname):
+        for b in self.buildings:
+            if b.getName()==bname:
                 return b
         return None
 
@@ -56,11 +62,12 @@ class Service:
         self.nbRoom+=1
         r=Room(name,self.nbRoom,floor,m2)
         self.findBuildingByid(buildingId).addRoom(r)
-
+        return r;
 
 
     def initRooms(self):
-        self.createRoom(1, "Mr. Pinarer", 1, 15)
+        r=self.createRoom(1, "Mr. Pinarer", 1, 15)
+        self.createSensorsForRoom(r)
         pass
 
     def createSensorsForRoom(self,room):
@@ -90,8 +97,8 @@ class ArayuzThread(threading.Thread):
         self.buildings=buildings
 
     def run(self):
-        app = arayuz.ProjectUi()
-        app.initBuildings(self.buildings)
+        app = arayuz.ProjectUi(self.buildings)
+        # app.initBuildings()
         app.run()
 
 

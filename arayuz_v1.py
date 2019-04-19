@@ -1,10 +1,20 @@
 from arayuz_bim import Ui_MainWindow
 from PyQt5 import QtWidgets, QtGui, QtCore
 import sys
+import Building
+import Room
+import Sensor
+
+from Main import Service as service
+
 
 
 class ProjectUi(QtWidgets.QMainWindow):
-    def __init__(self):
+    def __init__(self,buildings):
+        self.buildings = buildings
+        self.currentBuilding=None
+        self.currentRoom=None
+        self.currentSensor=None
 
         self.qt_app = QtWidgets.QApplication(sys.argv)
         QtWidgets.QWidget.__init__(self, None)
@@ -18,7 +28,9 @@ class ProjectUi(QtWidgets.QMainWindow):
         # self.ui.building_2
         # self.ui.room
 
-        self.ui.building.pressed.connect(self.denemeFonc)
+        self.ui.building.currentTextChanged.connect(self.configureRoomCombo)
+        self.ui.room.currentTextChanged.connect(self.configureSensorCombo)
+
         # # list1 =[]
         # self.ui.connect_button.pressed.connect(self.connect)
         # # self.ui.connect_button.pressed.connect(self.get_host_with_port)
@@ -37,33 +49,116 @@ class ProjectUi(QtWidgets.QMainWindow):
         # self.initialize_button_conf()
         # self.initializeMyBlogsList()
 
-    def denemeFonc(self):
-        print("ABASFAFAFAS")
-        pass
-    def initRooms(self,building):
-        for r in building.rooms:
-            self.ui.room.addItem(r.name)
+    def findBuildingByName(self,bname):
+        for b in self.buildings:
+            if b.getName()==bname:
+                return b
+        return None
 
-    def initBuildings(self,buildings):
+
+
+    def findRoomByName(self,building, rname):
+        print("findRoomByName")
+        try:
+            for r in building.getRooms():
+                if r.getName()==rname:
+                    return r
+        except:
+            pass
+        return None
+
+
+
+
+    def configureRoomCombo(self):
+        bname=self.ui.building.currentText()
+        b=self.findBuildingByName(bname)
+        self.currentBuilding=b
+
+        if bname=="GSU":
+            self.ui.myWindow.setPixmap(QtGui.QPixmap("./gsu.jpg"))
+            self.ui.myLog.setText("LogDeneme")
+            # pic.setGeometry(10, 10, 400, 100)
+            # use full ABSOLUTE path to the image, not relative
+            # pic.setPixmap(QtGui.QPixmap("./gsu.png"))
+        elif bname=="INSA":
+            self.ui.myWindow.setPixmap(QtGui.QPixmap("./insa.jpg"))
+            self.ui.myLog.setText("LogDeneme")
+            # pic.setGeometry(10, 10, 400, 100)
+            # use full ABSOLUTE path to the image, not relative
+            # pic.setPixmap(QtGui.QPixmap("./gsu.png"))
+        else:
+            self.ui.myWindow.setPixmap(QtGui.QPixmap("./bim.jpg"))
+            self.ui.myLog.setText("LogDeneme")
+            # pic.setGeometry(10, 10, 400, 100)
+            # use full ABSOLUTE path to the image, not relative
+            # pic.setPixmap(QtGui.QPixmap("./gsu.png"))
+
+            self.ui.room.setDisabled(True)
+            self.ui.sensor.setDisabled(True)
+
+        if self.ui.room.currentText()=="None":
+            self.ui.sensor.setDisabled(True)
+
+        # print(b)
+        if not bname=="None":
+            self.setRooms(b)
+        print("configureRoomCombo")
+        pass
+
+    def configureSensorCombo(self):
+        if not self.ui.room.currentText()=="None":
+            print("configureSensorCombo")
+            rname=self.ui.room.currentText()
+            print(rname,self.currentBuilding)
+            r=self.findRoomByName(self.currentBuilding,rname)
+            self.currentRoom=r
+            self.setSensors(r)
+        pass
+
+
+
+    def setRooms(self,building):
+        print("setRooms")
+        self.ui.room.setDisabled(False)
+        self.ui.room.clear()
+        try:
+            self.ui.room.addItem("None")
+            for r in building.getRooms():
+                self.ui.room.addItem(r.name)
+
+        except:
+            pass
+
+    def setSensors(self,room):
+        print("setSensors")
+        self.ui.sensor.setDisabled(False)
+        self.ui.sensor.clear()
+        try:
+            self.ui.sensor.addItem("None")
+            for s in room.getSensors():
+                self.ui.sensor.addItem(s.name)
+        except:
+            pass
+
+    def initBuildings(self):
         self.ui.building.clear()
         self.ui.room.clear()
-        print("ahahaha")
-        for b in buildings:
-            self.ui.building.addItem(b.name)
-            self.initRooms(b)
+        self.ui.sensor.clear()
+        self.ui.room.setDisabled(True)
+        self.ui.sensor.setDisabled(True)
 
-        self.ui.myWindow.setPixmap(QtGui.QPixmap("./gsu.jpg"))
-        # self.ui.myWindow.pixmap("gsu.jpg")
-        self.ui.myLog.setText("LogDeneme")
-        # pic.setGeometry(10, 10, 400, 100)
-        # use full ABSOLUTE path to the image, not relative
-        # pic.setPixmap(QtGui.QPixmap("./gsu.png"))
+        self.ui.building.addItem("None")
+        for b in self.buildings:
+            self.ui.building.addItem(b.name)
+            # self.initRooms(b)
+
         pass
 
     def run(self):
+        self.initBuildings()
         self.show()
         self.qt_app.exec_()
-        # self.initBuildings()
 
 
 def main():
