@@ -1,8 +1,18 @@
+import threading
+import queue
+import socket
+import time
+
+
 import Building
 from Building import Building
 from Room import Room
 from Sensor import Sensor
 import Sensor
+import arayuz_v1 as arayuz
+
+
+
 class Service:
 
     def __init__(self):
@@ -73,16 +83,34 @@ class Service:
 
         return room
 
+class ArayuzThread(threading.Thread):
+    def __init__(self, threadname,buildings):
+        threading.Thread.__init__(self)
+        self.threadName = threadname
+        self.buildings=buildings
+
+    def run(self):
+        app = arayuz.ProjectUi()
+        app.initBuildings(self.buildings)
+        app.run()
+
+
 def main():
+
+
     service = Service()
     service.initBuildings()
     service.initRooms()
 
-    b=service.chooseBuilding()
+    # b=service.chooseBuilding()
     print ("Your choice: ")
-    print (b)
+    # print (b)
     # print(service.buildings[0])
 
+    arayuzT = ArayuzThread("Arayüz Thread",service.buildings)
+    arayuzT.start()
+
+    arayuzT.join()
 
 if __name__ == '__main__':
     main()
