@@ -1,3 +1,5 @@
+import time
+
 from arayuz_bim import Ui_MainWindow
 from PyQt5 import QtWidgets, QtGui, QtCore
 from Building import Building
@@ -52,6 +54,7 @@ class ProjectUi(QtWidgets.QMainWindow):
 
 
     def configureRoomCombo(self):
+        print("configureRoomCombo")
         bname=self.ui.building.currentText()
         b=self.service.findBuildingByName(bname)
         self.currentBuilding=b
@@ -67,7 +70,6 @@ class ProjectUi(QtWidgets.QMainWindow):
             self.ui.myLog.setText("Thanks for using Building Information Modeling Application")
 
         self.setRooms(b)
-        print("configureRoomCombo")
         pass
 
     def configureSensorCombo(self):
@@ -126,15 +128,25 @@ class ProjectUi(QtWidgets.QMainWindow):
         try:
             s=self.service.findSensorByName(self.currentBuilding,self.currentRoom.getName(),sname)
             self.currentSensor = s
-            print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx", self.currentSensor)
         except:
             pass
         # self.setButton(s)
 
     def startStreaming(self):
         # print(self.currentSensor.last1000values)
-        self.ui.myLog.setText(str(self.currentSensor.last1000values))
-        pass
+        # self.ui.myLog.setText(str(self.currentSensor.last1000values)
+
+        for i in  range(len(self.currentSensor.last1000values)):
+            self.ui.myLog.setText(self.ui.myLog.toPlainText() + " >> " +  self.currentSensor.last1000values[i] )
+            time.sleep(0.001)
+
+        # for i in self.currentSensor.last1000values:
+        #     self.ui.myLog.setText(self.ui.myLog.toPlainText() + " >> " +  i )
+        #     # time.sleep(0.01)
+
+            # st=StreamThread(self.ui,self.currentSensor)
+        # st.start()
+        # st.join()
 
     def run(self):
         self.initBuildings()
@@ -143,6 +155,16 @@ class ProjectUi(QtWidgets.QMainWindow):
 
 
 
+class StreamThread(threading.Thread):
+    def __init__(self, ui,sensor):
+        threading.Thread.__init__(self)
+        self.ui = ui
+        self.sensor=sensor
+
+    def run(self):
+        for i in self.sensor.last1000values:
+            self.ui.myLog.setText(self.ui.myLog.toPlainText() + " >> " +  i )
+            # time.sleep(00.1)
 
 
 
@@ -238,11 +260,8 @@ class Service:
         print("findSensorByName")
         try:
             r=self.findRoomByName(building,rname)
-            print("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYbuilding",building)
-            print("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYroom,rname",r,rname)
             for s in r.getSensors():
                 if s.getName()==sname:
-                    print("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY", s)
                     return s
         except:
             pass
@@ -285,7 +304,6 @@ class Service:
     def initDatabase(self):
         tempFile=open("./data/temperature.txt","r")
         line=tempFile.readline()
-        print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",type(line.split(",")))
         l=line.split(",")
         self.database["temperature"]=l
 
