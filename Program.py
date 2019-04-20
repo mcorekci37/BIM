@@ -181,6 +181,7 @@ class Service:
         self.buildings=list()
         self.nbBuilding=0
         self.nbRoom=0
+        self.nbSensor=0
 
 
     def createBuilding(self,name,address):
@@ -228,9 +229,20 @@ class Service:
         return r;
 
     def initRooms(self):
-        r=self.createRoom(1, "Mr. Pinarer", 1, 15)
+        r=self.createRoom(1, "Mr. T. Askali", 1, 15)
+        self.createSensorsForRoom(r)
+        r=self.createRoom(1, "Mr. O. Pinarer", 1, 15)
+        self.createSensorsForRoom(r)
+        r=self.createRoom(1, "Mr. S. Turhan", 1, 15)
+        self.createSensorsForRoom(r)
+        r=self.createRoom(2, "Mr. O. Pinarer", 2, 20)
+        self.createSensorsForRoom(r)
+        r=self.createRoom(2, "Mr. Y. Gripay", 2, 20)
+        self.createSensorsForRoom(r)
+        r=self.createRoom(2, "Mrs. S. Servigne", 2, 20)
         self.createSensorsForRoom(r)
         pass
+
 
     def findRoomByName(self,building, rname):
         print("findRoomByName")
