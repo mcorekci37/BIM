@@ -1,3 +1,4 @@
+import os
 import time
 
 from arayuz_bim import Ui_MainWindow
@@ -7,6 +8,9 @@ from Room import Room
 from Sensor import Sensor
 import threading
 import sys
+from PyQt5.QtWidgets import QApplication
+
+SLEEPTIME_INSECONDS=2
 
 class ProjectUi(QtWidgets.QMainWindow):
     def __init__(self,service):
@@ -136,9 +140,14 @@ class ProjectUi(QtWidgets.QMainWindow):
         # print(self.currentSensor.last1000values)
         # self.ui.myLog.setText(str(self.currentSensor.last1000values)
 
+        # sys.stdout = Unbuffered(sys.stdout)
+
+        QApplication.processEvents()
         for i in  range(len(self.currentSensor.last1000values)):
-            self.ui.myLog.setText(self.ui.myLog.toPlainText() + " >> " +  self.currentSensor.last1000values[i] )
-            time.sleep(0.001)
+            # self.ui.myLog.setText(self.ui.myLog.toPlainText() + " >> " +  self.currentSensor.last1000values[i] )
+            QApplication.processEvents()
+            self.ui.myLog.append(" >> " +  self.currentSensor.last1000values[i] )
+            time.sleep(SLEEPTIME_INSECONDS)
 
         # for i in self.currentSensor.last1000values:
         #     self.ui.myLog.setText(self.ui.myLog.toPlainText() + " >> " +  i )
@@ -152,6 +161,9 @@ class ProjectUi(QtWidgets.QMainWindow):
         self.initBuildings()
         self.show()
         self.qt_app.exec_()
+
+
+
 
 
 
