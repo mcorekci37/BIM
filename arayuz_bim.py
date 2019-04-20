@@ -2,11 +2,12 @@
 
 # Form implementation generated from reading ui file 'arayuz_bim.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.12.1
 #
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -106,4 +107,5 @@ class Ui_MainWindow(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt;\">SENSOR</span></p></body></html>"))
         self.clearButton.setText(_translate("MainWindow", "CLEAR"))
         self.menuBIM.setTitle(_translate("MainWindow", "BIM"))
+
 
