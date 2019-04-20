@@ -23,13 +23,6 @@ class ProjectUi(QtWidgets.QMainWindow):
         self.ui.building.currentTextChanged.connect(self.configureRoomCombo)
         self.ui.room.currentTextChanged.connect(self.configureSensorCombo)
 
-
-        # self.ui.textEdit
-        # self.ui.lineEdit
-        # self.ui.building
-        # self.ui.building_2
-        # self.ui.room
-
         # # list1 =[]
         # self.ui.connect_button.pressed.connect(self.connect)
         # # self.ui.connect_button.pressed.connect(self.get_host_with_port)
@@ -56,19 +49,6 @@ class ProjectUi(QtWidgets.QMainWindow):
 
 
 
-    # def findRoomByName(self,building, rname):
-    #     print("findRoomByName")
-    #     try:
-    #         for r in building.getRooms():
-    #             if r.getName()==rname:
-    #                 return r
-    #     except:
-    #         pass
-    #     return None
-
-
-
-
     def configureRoomCombo(self):
         bname=self.ui.building.currentText()
         b=self.service.findBuildingByName(bname)
@@ -77,31 +57,13 @@ class ProjectUi(QtWidgets.QMainWindow):
         if bname=="GSU":
             self.ui.myWindow.setPixmap(QtGui.QPixmap("./gsu_sized.jpg"))
             self.ui.myLog.setText("Galatasaray University")
-            # pic.setGeometry(10, 10, 400, 100)
-            # use full ABSOLUTE path to the image, not relative
-            # pic.setPixmap(QtGui.QPixmap("./gsu.png"))
         elif bname=="INSA":
             self.ui.myWindow.setPixmap(QtGui.QPixmap("./insa_sized.jpg"))
             self.ui.myLog.setText("INSA Lyon | Institut National des Sciences Appliquées de Lyon")
-            # pic.setGeometry(10, 10, 400, 100)
-            # use full ABSOLUTE path to the image, not relative
-            # pic.setPixmap(QtGui.QPixmap("./gsu.png"))
         else:
             self.ui.myWindow.setPixmap(QtGui.QPixmap("./bim_sized.jpg"))
             self.ui.myLog.setText("Thanks for using Building Information Modeling Application")
-            # pic.setGeometry(10, 10, 400, 100)
-            # use full ABSOLUTE path to the image, not relative
-            # pic.setPixmap(QtGui.QPixmap("./gsu.png"))
 
-            # self.ui.room.setDisabled(True)
-            # self.ui.sensor.setDisabled(True)
-
-        # if self.ui.room.currentText()=="None":
-        #     self.ui.sensor.setDisabled(True)
-
-        # print(b)
-        # if not bname=="None":
-        #     self.setRooms(b)
         self.setRooms(b)
         print("configureRoomCombo")
         pass
@@ -110,17 +72,8 @@ class ProjectUi(QtWidgets.QMainWindow):
         print("configureSensorCombo")
         rname=self.ui.room.currentText()
         r=self.service.findRoomByName(self.currentBuilding,rname)
-        print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXxx",r)
         self.currentRoom=r
         self.setSensors(r)
-        # if not self.ui.room.currentText()=="None":
-        #     print("configureSensorCombo")
-        #     rname=self.ui.room.currentText()
-        #     print(rname,self.currentBuilding)
-        #     r=self.findRoomByName(self.currentBuilding,rname)
-        #     self.currentRoom=r
-        #     self.setSensors(r)
-        pass
 
 
 
@@ -182,7 +135,7 @@ class Service:
         self.nbBuilding=0
         self.nbRoom=0
         self.nbSensor=0
-
+        self.database=dict()
 
     def createBuilding(self,name,address):
         self.nbBuilding+=1
@@ -233,7 +186,7 @@ class Service:
         self.createSensorsForRoom(r)
         r=self.createRoom(1, "Mr. O. Pinarer", 1, 15)
         self.createSensorsForRoom(r)
-        r=self.createRoom(1, "Mr. S. Turhan", 1, 15)
+        r=self.createRoom(1, "Mrs. S. Turhan", 1, 15)
         self.createSensorsForRoom(r)
         r=self.createRoom(2, "Mr. O. Pinarer", 2, 20)
         self.createSensorsForRoom(r)
@@ -241,7 +194,6 @@ class Service:
         self.createSensorsForRoom(r)
         r=self.createRoom(2, "Mrs. S. Servigne", 2, 20)
         self.createSensorsForRoom(r)
-        pass
 
 
     def findRoomByName(self,building, rname):
@@ -250,6 +202,16 @@ class Service:
             for r in building.getRooms():
                 if r.getName()==rname:
                     return r
+        except:
+            pass
+        return None
+
+    def findSensorByKind(self,building, rname, skind):
+        print("findSensorByKind")
+        try:
+            for s in ( self.findRoomByName(building,rname) ).getSensors():
+                if s.getKind()==skind:
+                    return s
         except:
             pass
         return None
@@ -263,20 +225,59 @@ class Service:
         # 400 that means its type is luminosité
         # 500 that means its type is présence
 
-        s=Sensor("Temperature",1001,"Temperature")
+        s=Sensor("Temperature",1001,"temperature")
+        self.initValuesForSensor("temperature",s)
         room.addSensor(s)
-        s=Sensor("Humidité",2001,"Humidité")
+
+        s=Sensor("Humidité",2001,"damp")
+        self.initValuesForSensor("damp",s)
         room.addSensor(s)
-        s=Sensor("Emission de CO2",3001,"Emission de CO2")
+
+        s=Sensor("Emission de CO2",3001,"co2")
+        self.initValuesForSensor("co2",s)
         room.addSensor(s)
-        s=Sensor("Luminosité",4001,"Luminosité")
+
+        s=Sensor("Luminosité",4001,"light")
+        self.initValuesForSensor("light",s)
         room.addSensor(s)
-        s=Sensor("Présence",5001,"Présence")
+
+        s=Sensor("Présence",5001,"presence")
+        self.initValuesForSensor("presence",s)
         room.addSensor(s)
 
         return room
 
+    def initValuesForSensor(self,kind,sensor):
+        sensor.last1000values=self.database[kind]
 
+    def initDatabase(self):
+        tempFile=open("./data/temperature.txt","r")
+        line=tempFile.readline()
+        print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",type(line.split(",")))
+        list= map(int,line.split(","))
+        self.database["temperature"]=list
+
+        tempFile=open("./data/damp.txt","r")
+        line=tempFile.readline()
+        list= map(int,line.split(","))
+        self.database["damp"]=list
+
+        tempFile=open("./data/co2.txt","r")
+        line=tempFile.readline()
+        list= map(int,line.split(","))
+        self.database["co2"]=list
+
+        tempFile=open("./data/light.txt","r")
+        line=tempFile.readline()
+        list= map(int,line.split(","))
+        self.database["light"]=list
+
+        tempFile=open("./data/presence.txt","r")
+        line=tempFile.readline()
+        list= map(int,line.split(","))
+        self.database["presence"]=list
+
+        pass
 
 class ArayuzThread(threading.Thread):
     def __init__(self, threadname,service):
@@ -293,8 +294,8 @@ def main():
 
 
     service = Service()
+    service.initDatabase()
     service.initBuildings()
-
     app = ProjectUi(service)
     app.run()
 

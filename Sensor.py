@@ -6,7 +6,7 @@ class Sensor:
         self.kind=kind
         self.value=None
         # self.last100values=Queue.Queue()
-        self.last100values=list()
+        self.last1000values=list()
         pass
 
     def getName(self):
@@ -28,9 +28,9 @@ class Sensor:
         return self.value
     def setValue(self,value):
         self.value=value
-        self.last100values.insert(0,value)
-        if len(self.last100values)>=100:
-            self.last100values.remove(len(self.last100values)-1)
+        self.last1000values.insert(0,value)
+        if len(self.last1000values)>=100:
+            self.last1000values.remove(len(self.last1000values)-1)
         # self.last100values.put(value)
         # if len(self.last100values)>=100:
         #     self.last100values.get()
