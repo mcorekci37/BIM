@@ -75,20 +75,20 @@ class ProjectUi(QtWidgets.QMainWindow):
         self.currentBuilding=b
 
         if bname=="GSU":
-            self.ui.myWindow.setPixmap(QtGui.QPixmap("./gsu.jpg"))
+            self.ui.myWindow.setPixmap(QtGui.QPixmap("./gsu_sized.jpg"))
             self.ui.myLog.setText("Galatasaray University")
             # pic.setGeometry(10, 10, 400, 100)
             # use full ABSOLUTE path to the image, not relative
             # pic.setPixmap(QtGui.QPixmap("./gsu.png"))
         elif bname=="INSA":
-            self.ui.myWindow.setPixmap(QtGui.QPixmap("./insa.jpg"))
+            self.ui.myWindow.setPixmap(QtGui.QPixmap("./insa_sized.jpg"))
             self.ui.myLog.setText("INSA Lyon | Institut National des Sciences Appliquées de Lyon")
             # pic.setGeometry(10, 10, 400, 100)
             # use full ABSOLUTE path to the image, not relative
             # pic.setPixmap(QtGui.QPixmap("./gsu.png"))
         else:
-            self.ui.myWindow.setPixmap(QtGui.QPixmap("./bim.jpg"))
-            self.ui.myLog.setText("Thanks to Building Information Modeling Application")
+            self.ui.myWindow.setPixmap(QtGui.QPixmap("./bim_sized.jpg"))
+            self.ui.myLog.setText("Thanks for using Building Information Modeling Application")
             # pic.setGeometry(10, 10, 400, 100)
             # use full ABSOLUTE path to the image, not relative
             # pic.setPixmap(QtGui.QPixmap("./gsu.png"))
