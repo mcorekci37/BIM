@@ -22,6 +22,8 @@ class ProjectUi(QtWidgets.QMainWindow):
 
         self.ui.building.currentTextChanged.connect(self.configureRoomCombo)
         self.ui.room.currentTextChanged.connect(self.configureSensorCombo)
+        self.ui.sensor.currentTextChanged.connect(self.configureButton)
+        self.ui.clearButton.pressed.connect(self.startStreaming)
 
         # # list1 =[]
         # self.ui.connect_button.pressed.connect(self.connect)
@@ -116,6 +118,22 @@ class ProjectUi(QtWidgets.QMainWindow):
             self.ui.building.addItem(b.name)
             # self.initRooms(b)
 
+        pass
+
+    def configureButton(self):
+        print("configureButton")
+        sname=self.ui.sensor.currentText()
+        try:
+            s=self.service.findSensorByName(self.currentBuilding,self.currentRoom.getName(),sname)
+            self.currentSensor = s
+            print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx", self.currentSensor)
+        except:
+            pass
+        # self.setButton(s)
+
+    def startStreaming(self):
+        # print(self.currentSensor.last1000values)
+        self.ui.myLog.setText(str(self.currentSensor.last1000values))
         pass
 
     def run(self):
@@ -216,6 +234,20 @@ class Service:
             pass
         return None
 
+    def findSensorByName(self,building, rname, sname):
+        print("findSensorByName")
+        try:
+            r=self.findRoomByName(building,rname)
+            print("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYbuilding",building)
+            print("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYroom,rname",r,rname)
+            for s in r.getSensors():
+                if s.getName()==sname:
+                    print("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY", s)
+                    return s
+        except:
+            pass
+        return None
+
 
 
     def createSensorsForRoom(self,room):
@@ -229,19 +261,19 @@ class Service:
         self.initValuesForSensor("temperature",s)
         room.addSensor(s)
 
-        s=Sensor("Humidité",2001,"damp")
+        s=Sensor("Damp",2001,"damp")
         self.initValuesForSensor("damp",s)
         room.addSensor(s)
 
-        s=Sensor("Emission de CO2",3001,"co2")
+        s=Sensor("Co2",3001,"co2")
         self.initValuesForSensor("co2",s)
         room.addSensor(s)
 
-        s=Sensor("Luminosité",4001,"light")
+        s=Sensor("Light",4001,"light")
         self.initValuesForSensor("light",s)
         room.addSensor(s)
 
-        s=Sensor("Présence",5001,"presence")
+        s=Sensor("Presence",5001,"presence")
         self.initValuesForSensor("presence",s)
         room.addSensor(s)
 
@@ -254,28 +286,29 @@ class Service:
         tempFile=open("./data/temperature.txt","r")
         line=tempFile.readline()
         print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",type(line.split(",")))
-        list= map(int,line.split(","))
-        self.database["temperature"]=list
+        l=line.split(",")
+        self.database["temperature"]=l
 
         tempFile=open("./data/damp.txt","r")
         line=tempFile.readline()
-        list= map(int,line.split(","))
-        self.database["damp"]=list
+        l=line.split(",")
+        self.database["damp"]=l
 
         tempFile=open("./data/co2.txt","r")
         line=tempFile.readline()
-        list= map(int,line.split(","))
-        self.database["co2"]=list
+        l=line.split(",")
+        self.database["co2"]=l
 
         tempFile=open("./data/light.txt","r")
         line=tempFile.readline()
-        list= map(int,line.split(","))
-        self.database["light"]=list
+        # l= list(map(int,line.split(",")))
+        l=line.split(",")
+        self.database["light"]=l
 
         tempFile=open("./data/presence.txt","r")
         line=tempFile.readline()
-        list= map(int,line.split(","))
-        self.database["presence"]=list
+        l=line.split(",")
+        self.database["presence"]=l
 
         pass
 
