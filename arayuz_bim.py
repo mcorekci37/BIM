@@ -30,12 +30,22 @@ class Ui_MainWindow(object):
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
         self.room = QtWidgets.QComboBox(self.centralwidget)
-        self.room.setGeometry(QtCore.QRect(600, 200, 181, 51))
+        self.room.setGeometry(QtCore.QRect(600, 330, 181, 51))
         self.room.setMinimumSize(QtCore.QSize(181, 0))
         self.room.setEditable(False)
         self.room.setObjectName("room")
         self.room.addItem("")
         self.room.addItem("")
+
+        self.floor = QtWidgets.QComboBox(self.centralwidget)
+        self.floor.setGeometry(QtCore.QRect(600, 200, 181, 51))
+        self.floor.setMinimumSize(QtCore.QSize(181, 0))
+        self.floor.setEditable(False)
+        self.floor.setObjectName("floor")
+        self.floor.addItem("First Floor")
+        self.floor.addItem("Second Floor")
+
+
         self.buildingText = QtWidgets.QTextEdit(self.centralwidget)
         self.buildingText.setGeometry(QtCore.QRect(600, 20, 121, 41))
         self.buildingText.setObjectName("buildingText")
@@ -47,24 +57,30 @@ class Ui_MainWindow(object):
         self.myWindow.setText("")
         self.myWindow.setObjectName("myWindow")
         self.roomText = QtWidgets.QTextEdit(self.centralwidget)
-        self.roomText.setGeometry(QtCore.QRect(600, 150, 121, 41))
+        self.roomText.setGeometry(QtCore.QRect(600, 280, 121, 41))
         self.roomText.setObjectName("roomText")
+
+        self.floorText = QtWidgets.QTextEdit(self.centralwidget)
+        self.floorText.setGeometry(QtCore.QRect(600, 150, 121, 41))
+        self.floorText.setObjectName("floorText")
+
+
         self.sensor = QtWidgets.QComboBox(self.centralwidget)
-        self.sensor.setGeometry(QtCore.QRect(600, 330, 181, 51))
+        self.sensor.setGeometry(QtCore.QRect(600, 460, 181, 51))
         self.sensor.setMinimumSize(QtCore.QSize(181, 0))
         self.sensor.setEditable(False)
         self.sensor.setObjectName("sensor")
         self.sensor.addItem("")
         self.sensor.addItem("")
         self.sensorText = QtWidgets.QTextEdit(self.centralwidget)
-        self.sensorText.setGeometry(QtCore.QRect(600, 280, 121, 41))
+        self.sensorText.setGeometry(QtCore.QRect(600, 410, 121, 41))
         self.sensorText.setObjectName("sensorText")
-        self.clearButton = QtWidgets.QPushButton(self.centralwidget)
-        self.clearButton.setGeometry(QtCore.QRect(600, 420, 191, 71))
+        self.streamingButton = QtWidgets.QPushButton(self.centralwidget)
+        self.streamingButton.setGeometry(QtCore.QRect(600, 510, 191, 71))
         font = QtGui.QFont()
         font.setPointSize(14)
-        self.clearButton.setFont(font)
-        self.clearButton.setObjectName("clearButton")
+        self.streamingButton.setFont(font)
+        self.streamingButton.setObjectName("streamingButton")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1029, 26))
@@ -82,7 +98,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Building Information Modeling"))
         self.building.setCurrentText(_translate("MainWindow", "deneme1"))
         self.building.setItemText(0, _translate("MainWindow", "deneme1"))
         self.building.setItemText(1, _translate("MainWindow", "deneme2"))
@@ -99,6 +115,11 @@ class Ui_MainWindow(object):
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt;\">ROOM</span></p></body></html>"))
+        self.floorText.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt;\">FLOOR</span></p></body></html>"))
         self.sensor.setCurrentText(_translate("MainWindow", "sensor1"))
         self.sensor.setItemText(0, _translate("MainWindow", "sensor1"))
         self.sensor.setItemText(1, _translate("MainWindow", "sensor2"))
@@ -107,7 +128,7 @@ class Ui_MainWindow(object):
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">AVAILABLE SERVICES</span></p></body></html>"))
-        self.clearButton.setText(_translate("MainWindow", "START STREAMING"))
+        self.streamingButton.setText(_translate("MainWindow", "START STREAMING"))
         self.menuBIM.setTitle(_translate("MainWindow", "BIM"))
 
 

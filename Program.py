@@ -10,7 +10,7 @@ import threading
 import sys
 from PyQt5.QtWidgets import QApplication
 
-SLEEPTIME_INSECONDS=2
+SLEEPTIME_INSECONDS=0.5
 
 class ProjectUi(QtWidgets.QMainWindow):
     def __init__(self,service):
@@ -29,7 +29,7 @@ class ProjectUi(QtWidgets.QMainWindow):
         self.ui.building.currentTextChanged.connect(self.configureRoomCombo)
         self.ui.room.currentTextChanged.connect(self.configureSensorCombo)
         self.ui.sensor.currentTextChanged.connect(self.configureButton)
-        self.ui.clearButton.pressed.connect(self.startStreaming)
+        self.ui.streamingButton.pressed.connect(self.startStreaming)
 
         # # list1 =[]
         # self.ui.connect_button.pressed.connect(self.connect)
