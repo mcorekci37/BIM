@@ -4,7 +4,6 @@ class Room:
         self.name=name
         self.id=id
         self.floor=floor
-        self.name=name
         self.m2=m2
         self.sensors=list()
 

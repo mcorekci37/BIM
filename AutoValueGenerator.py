@@ -28,7 +28,7 @@ def main():
             tempFile = open("data/damp.txt", "w")
             for x in range(1000):
                 print("2")
-                tempFile.write(str(random.random()) + ",")
+                tempFile.write(str(random.random())[:4] + ",")
             tempFile.close()
         elif choice == 3:
             tempFile = open("data/co2.txt", "w")
