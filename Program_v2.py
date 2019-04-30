@@ -15,21 +15,30 @@ SLEEPTIME_INSECONDS=0.5
 
 class ProjectUi(QtWidgets.QMainWindow):
     def __init__(self,service):
-        self.service = service
-        self.currentBuilding=None
-        self.currentRoom=None
-        self.currentSensor=dict()
-        self.currentSensor["Temperature"]=None
-        self.currentSensor["Damp"]=None
-        self.currentSensor["Co2"]=None
-        self.currentSensor["Light"]=None
-        self.currentSensor["Presence"]=None
 
         self.qt_app = QtWidgets.QApplication(sys.argv)
         QtWidgets.QWidget.__init__(self, None)
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+
+        self.service = service
+        self.currentBuilding=None
+        self.currentRoom=None
+        self.currentSensors=dict()
+        self.checkBoxDict=dict()
+        self.checkBoxDict["Temperature"]=self.ui.temperature
+        self.checkBoxDict["Damp"]=self.ui.damp
+        self.checkBoxDict["Co2"]=self.ui.co2
+        self.checkBoxDict["Light"]=self.ui.light
+        self.checkBoxDict["Presence"]=self.ui.presence
+        self.currentSensors["Temperature"]=None
+        self.currentSensors["Damp"]=None
+        self.currentSensors["Co2"]=None
+        self.currentSensors["Light"]=None
+        self.currentSensors["Presence"]=None
+
+
 
         self.ui.building.currentTextChanged.connect(self.configureFloorCombo)
         self.ui.floor.currentTextChanged.connect(self.configureRoomCombo)
@@ -216,87 +225,102 @@ class ProjectUi(QtWidgets.QMainWindow):
         lightStat=self.ui.temperature.isChecked()
         presenceStat=self.ui.temperature.isChecked()
 
-        for k in self.currentSensor.keys():
-            if self.currentSensor[k].isChecked():
+        for k in self.currentSensors.keys():
+            if self.currentSensors[k].isChecked():
                 pass
 
         try:
             if temperatureStat:
                 self.service.findSensorByName(self.currentBuilding,self.currentRoom,"Temperature")
-                self.currentSensor["Temperature"] = True
+                self.currentSensors["Temperature"] = True
             if dampStat:
                 self.service.findSensorByName(self.currentBuilding,self.currentRoom,"Damp")
-                self.currentSensor["Damp"] = True
+                self.currentSensors["Damp"] = True
             if co2Stat:
                 self.service.findSensorByName(self.currentBuilding,self.currentRoom,"Co2")
-                self.currentSensor["Co2"] = True
+                self.currentSensors["Co2"] = True
             if lightStat:
                 self.service.findSensorByName(self.currentBuilding,self.currentRoom,"Light")
-                self.currentSensor["Light"] = True
+                self.currentSensors["Light"] = True
             if presenceStat:
                 self.service.findSensorByName(self.currentBuilding,self.currentRoom,"Presence"),
-                self.currentSensor["Presence"] = True
+                self.currentSensors["Presence"] = True
 
 
             # s=self.service.findSensorByName(self.currentBuilding,self.currentRoom.getName(),sname)
-            # self.currentSensor = s
+            # self.currentSensors = s
         except:
             pass
         # self.setButton(s)
 
     def startStreaming(self):
-        # print(self.currentSensor.last1000values)
-        # self.ui.myLog.setText(str(self.currentSensor.last1000values)
+        # QApplication.processEvents()
 
-        # sys.stdout = Unbuffered(sys.stdout)
+        for i in  range(1000):
+            QApplication.processEvents()
+            for k in self.checkBoxDict.keys():
+                if self.checkBoxDict[k].isChecked():
+                    tempS = self.service.findSensorByName(self.currentBuilding, self.currentRoom.getName(),k)
+                    self.currentSensors[k] = tempS
+                    self.sensorLogAssosication[k].append("> " +  self.currentSensors[k].last1000values[i] )
+            time.sleep(SLEEPTIME_INSECONDS)
+
+    def startStreaming2(self):
         if self.ui.temperature.isChecked():
             tempS=self.service.findSensorByName(self.currentBuilding,self.currentRoom.getName(),"Temperature")
-            self.currentSensor["Temperature"]=tempS
+            self.currentSensors["Temperature"]=tempS
         else:
-            self.currentSensor["Temperature"]=None
+            self.currentSensors["Temperature"]=None
+
         if self.ui.damp.isChecked():
             tempS=self.service.findSensorByName(self.currentBuilding,self.currentRoom.getName(),"Damp")
-            self.currentSensor["Damp"]=tempS
+            self.currentSensors["Damp"]=tempS
         else:
-            self.currentSensor["Damp"]=None
+            self.currentSensors["Damp"]=None
+
         if self.ui.co2.isChecked():
             tempS=self.service.findSensorByName(self.currentBuilding,self.currentRoom.getName(),"Co2")
-            self.currentSensor["Co2"] = tempS
+            self.currentSensors["Co2"] = tempS
         else:
-            self.currentSensor["Co2"] = tempS
+            self.currentSensors["Co2"] = None
+
         if self.ui.light.isChecked():
             tempS=self.service.findSensorByName(self.currentBuilding,self.currentRoom.getName(),"Light")
-            self.currentSensor["Light"]=tempS
+            self.currentSensors["Light"]=tempS
         else:
-            self.currentSensor["Light"]=tempS
+            self.currentSensors["Light"]=None
+
         if self.ui.presence.isChecked():
             tempS=self.service.findSensorByName(self.currentBuilding,self.currentRoom.getName(),"Presence")
-            self.currentSensor["Presence"]=tempS
+            self.currentSensors["Presence"]=tempS
         else:
-            self.currentSensor["Presence"]=tempS
+            self.currentSensors["Presence"]=None
 
         QApplication.processEvents()
-        for i in  range(len(self.currentSensor["Temperature"].last1000values)):
-            # self.ui.myLog.setText(self.ui.myLog.toPlainText() + " >> " +  self.currentSensor.last1000values[i] )
+        for i in  range(len(self.currentSensors["Temperature"].last1000values)):
+            # self.ui.myLog.setText(self.ui.myLog.toPlainText() + " >> " +  self.currentSensors.last1000values[i] )
             QApplication.processEvents()
 
-            for k in self.currentSensor.keys():
-                if not self.currentSensor[k]==None:
-                    self.sensorLogAssosication[k].append("> " +  self.currentSensor[k].last1000values[i] )
+            for k in self.currentSensors.keys():
+                try:
+                    # if not self.currentSensors[k]==None:
+                    self.sensorLogAssosication[k].append("> " +  self.currentSensors[k].last1000values[i] )
+                except:
+                    self.sensorLogAssosication[k].clear()
 
-            # self.ui.tempLog.append("> " +  self.currentSensor["Temperature"].last1000values[i] )
-            # self.ui.dampLog.append("> " +  self.currentSensor["Damp"].last1000values[i][:4] )
-            # self.ui.co2Log.append("> " +  self.currentSensor["Co2"].last1000values[i] )
-            # self.ui.lightLog.append("> " +  self.currentSensor["Light"].last1000values[i] )
-            # self.ui.presenceLog.append("> " +  self.currentSensor["Presence"].last1000values[i] )
+            # self.ui.tempLog.append("> " +  self.currentSensors["Temperature"].last1000values[i] )
+            # self.ui.dampLog.append("> " +  self.currentSensors["Damp"].last1000values[i][:4] )
+            # self.ui.co2Log.append("> " +  self.currentSensors["Co2"].last1000values[i] )
+            # self.ui.lightLog.append("> " +  self.currentSensors["Light"].last1000values[i] )
+            # self.ui.presenceLog.append("> " +  self.currentSensors["Presence"].last1000values[i] )
 
             time.sleep(SLEEPTIME_INSECONDS)
 
-        # for i in self.currentSensor.last1000values:
+        # for i in self.currentSensors.last1000values:
         #     self.ui.myLog.setText(self.ui.myLog.toPlainText() + " >> " +  i )
         #     # time.sleep(0.01)
 
-        # st=StreamThread(self.ui,self.currentSensor)
+        # st=StreamThread(self.ui,self.currentSensors)
         # st.start()
         # st.join()
 
