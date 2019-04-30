@@ -23,28 +23,23 @@ class ProjectUi(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
 
         self.service = service
+
         self.currentBuilding=None
         self.currentRoom=None
-        self.currentSensors=dict()
+
         self.checkBoxDict=dict()
         self.checkBoxDict["Temperature"]=self.ui.temperature
         self.checkBoxDict["Damp"]=self.ui.damp
         self.checkBoxDict["Co2"]=self.ui.co2
         self.checkBoxDict["Light"]=self.ui.light
         self.checkBoxDict["Presence"]=self.ui.presence
+
+        self.currentSensors=dict()
         self.currentSensors["Temperature"]=None
         self.currentSensors["Damp"]=None
         self.currentSensors["Co2"]=None
         self.currentSensors["Light"]=None
         self.currentSensors["Presence"]=None
-
-
-
-        self.ui.building.currentTextChanged.connect(self.configureFloorCombo)
-        self.ui.floor.currentTextChanged.connect(self.configureRoomCombo)
-        self.ui.room.currentTextChanged.connect(self.configureSensorCombo)
-        # self.ui.sensor.currentTextChanged.connect(self.configureButton)
-        self.ui.streamButton.pressed.connect(self.startStreaming)
 
         self.sensorLogAssosication=dict()
         self.sensorLogAssosication["Temperature"]=self.ui.tempLog
@@ -54,112 +49,121 @@ class ProjectUi(QtWidgets.QMainWindow):
         self.sensorLogAssosication["Presence"]=self.ui.presenceLog
 
 
-        # # list1 =[]
-        # self.ui.connect_button.pressed.connect(self.connect)
-        # # self.ui.connect_button.pressed.connect(self.get_host_with_port)
-        # self.ui.connect_button.pressed.connect(self.change_profile_name)
-        # # self.ui.connect_button.pressed.connect(self.disable_button)
-        # self.ui.LogOut_button.pressed.connect(self.logout_button)
-        # self.ui.Subscribe_button.pressed.connect(self.subscribe_button)
-        # self.ui.UnSubscribe_button.pressed.connect(self.unsubscribe_button)
-        # self.ui.UnBlock_button.pressed.connect(self.unblock_button)
-        # self.ui.Block_button.pressed.connect(self.block_button)
-        # self.ui.SendMessage_button.pressed.connect(self.send_message_button)
-        # self.ui.Share_button.pressed.connect(self.share_twit_button)
-        # self.ui.Pubkey_button.pressed.connect(self.pubkey_button)
-        # self.ui.users_button.pressed.connect(self.users_button)
-        # self.initializeIpPort()
-        # self.initialize_button_conf()
-        # self.initializeMyBlogsList()
-
-    def findBuildingByName(self,bname):
-        for b in self.service.buildings:
-            if b.getName()==bname:
-                return b
-        return None
-
+        self.ui.building.currentTextChanged.connect(self.configureFloorCombo)
+        self.ui.floor.currentTextChanged.connect(self.configureRoomCombo)
+        self.ui.room.currentTextChanged.connect(self.configureSensorCombo)
+        self.ui.streamButton.pressed.connect(self.startStreaming)
 
 
     def configureFloorCombo(self):
         print("configureFloorCombo")
         bname=self.ui.building.currentText()
-        b=self.service.findBuildingByName(bname)
-        self.currentBuilding=b
+        if not bname=="None":
+            b=self.service.findBuildingByName(bname)
+            self.currentBuilding=b
 
-        if bname=="GSU":
-            # self.ui.myWindow.setPixmap(QtGui.QPixmap("./floor_sized.jpg"))
-            self.ui.myWindow.setPixmap(QtGui.QPixmap("./gsu_sized.jpg"))
-            self.ui.myLog.setText("Galatasaray University")
-        elif bname=="INSA":
-            self.ui.myWindow.setPixmap(QtGui.QPixmap("./insa_sized.jpg"))
-            self.ui.myLog.setText("INSA Lyon | Institut National des Sciences Appliquées de Lyon")
+            if bname=="GSU":
+                # self.ui.myWindow.setPixmap(QtGui.QPixmap("./floor_sized.jpg"))
+                self.ui.myWindow.setPixmap(QtGui.QPixmap("./gsu_sized.jpg"))
+                self.ui.myLog.setText("Galatasaray University")
+            elif bname=="INSA":
+                self.ui.myWindow.setPixmap(QtGui.QPixmap("./insa_sized.jpg"))
+                self.ui.myLog.setText("INSA Lyon | Institut National des Sciences Appliquées de Lyon")
+            if not self.currentBuilding is None:
+                self.setFloors(b)
         else:
             self.ui.myWindow.setPixmap(QtGui.QPixmap("./bim_sized.jpg"))
             self.ui.myLog.setText("Thanks for using Building Information Modeling Application")
 
-        if not self.currentBuilding is None:
-            self.setFloors(b)
+            self.currentBuilding = None
+            self.currentRoom = None
+            for k in self.currentSensors.keys():
+                self.currentSensors[k]=None
+            self.ui.room.clear()
+            self.ui.room.addItem("None")
+            self.ui.floor.clear()
+            self.ui.floor.addItem("None")
+            self.ui.room.setDisabled(True)
+            self.ui.floor.setDisabled(True)
+
+            for k in self.checkBoxDict.keys():
+                self.checkBoxDict[k].setVisible(False)
+
         # self.setRooms(b)
 
     def configureRoomCombo(self):
-        print("configureRoomCombo")
-        bname=self.ui.building.currentText()
-        b=self.service.findBuildingByName(bname)
-        self.currentBuilding=b
+        if not self.currentBuilding is None:
+            print("configureRoomCombo")
+            b=self.currentBuilding
+            bname=b.getName()
+            if not self.ui.floor.currentText()=="None":
+                if bname=="GSU":
+                    self.ui.myWindow.setPixmap(QtGui.QPixmap("./gsu_plan_sized.jpg"))
+                    self.ui.myLog.setText("Galatasaray University")
+                elif bname=="INSA":
+                    self.ui.myWindow.setPixmap(QtGui.QPixmap("./floor_sized.jpg"))
+                    self.ui.myLog.setText("INSA Lyon | Institut National des Sciences Appliquées de Lyon")
+                # else:
+                #     self.ui.myWindow.setPixmap(QtGui.QPixmap("./bim_sized.jpg"))
+                #     self.ui.myLog.setText("Thanks for using Building Information Modeling Application")
 
-        # if bname=="GSU":
-        #     self.ui.myWindow.setPixmap(QtGui.QPixmap("./gsu_sized.jpg"))
-        #     self.ui.myLog.setText("Galatasaray University")
-        # elif bname=="INSA":
-        #     self.ui.myWindow.setPixmap(QtGui.QPixmap("./insa_sized.jpg"))
-        #     self.ui.myLog.setText("INSA Lyon | Institut National des Sciences Appliquées de Lyon")
-        # else:
-        #     self.ui.myWindow.setPixmap(QtGui.QPixmap("./bim_sized.jpg"))
-        #     self.ui.myLog.setText("Thanks for using Building Information Modeling Application")
+            if not self.ui.floor.currentText()=="None":
+                self.setRooms(b)
+            else:
+                self.currentRoom = None
+                for k in self.currentSensors.keys():
+                    self.currentSensors[k]=None
+                self.ui.room.clear()
+                self.ui.room.addItem("None")
+                self.ui.room.setDisabled(True)
 
-        # self.setFloors(b)
-        if not self.ui.floor.currentText()=="None":
-            self.setRooms(b)
-            pass
+                for k in self.checkBoxDict.keys():
+                    self.checkBoxDict[k].setVisible(False)
+
+                if bname=="GSU":
+                    # self.ui.myWindow.setPixmap(QtGui.QPixmap("./floor_sized.jpg"))
+                    self.ui.myWindow.setPixmap(QtGui.QPixmap("./gsu_sized.jpg"))
+                    self.ui.myLog.setText("Galatasaray University")
+                elif bname=="INSA":
+                    self.ui.myWindow.setPixmap(QtGui.QPixmap("./insa_sized.jpg"))
+                    self.ui.myLog.setText("INSA Lyon | Institut National des Sciences Appliquées de Lyon")
+
+
 
     def setFloors(self,building):
-        # self.setRooms(building)
-        print("setFloors")
-        # self.ui.room.setDisabled(False)
-        bname = building.getName()
-        if not (self.ui.floor.currentText()==None or self.ui.floor.currentText()=="None" or self.ui.floor.currentText()==""):
-            if bname=="GSU":
-                # self.ui.myWindow.setPixmap(QtGui.QPixmap("./floor_sized.jpg"))
-                self.ui.myWindow.setPixmap(QtGui.QPixmap("./gsu_plan_sized.jpg"))
-            elif bname=="INSA":
-                self.ui.myWindow.setPixmap(QtGui.QPixmap("./floor_sized.jpg"))
-            else:
-                self.ui.myWindow.setPixmap(QtGui.QPixmap("./bim_sized.jpg"))
-                self.ui.myLog.setText("Thanks for using Building Information Modeling Application")
+        if not self.currentBuilding is None:
+            print("setFloors")
+            self.ui.floor.clear()
+            if not building is None:
+                # self.ui.room.addItem("None")
+                self.ui.floor.addItem("None")
+                self.ui.floor.addItem("First Floor")
+                self.ui.floor.addItem("Second Floor")
+                self.ui.floor.setDisabled(False)
+            else:#if building value is None
+                self.ui.floor.setDisabled(True)
+                self.ui.temperature.setVisible(False)
+                self.ui.damp.setVisible(False)
+                self.ui.co2.setVisible(False)
+                self.ui.light.setVisible(False)
+                self.ui.presence.setVisible(False)
+                # self.ui.sensor.setDisabled(True)
 
-        self.ui.floor.clear()
-        if not building is None:
-            # self.ui.room.addItem("None")
-            self.ui.floor.addItem("None")
-            self.ui.floor.addItem("First Floor")
-            self.ui.floor.addItem("Second Floor")
-            self.ui.floor.setDisabled(False)
-        else:#if building value is None
-            self.ui.floor.setDisabled(True)
-            self.ui.temperature.setVisible(False)
-            self.ui.damp.setVisible(False)
-            self.ui.co2.setVisible(False)
-            self.ui.light.setVisible(False)
-            self.ui.presence.setVisible(False)
-            # self.ui.sensor.setDisabled(True)
-            pass
 
     def configureSensorCombo(self):
-        print("configureSensorCombo")
-        rname=self.ui.room.currentText()
-        r=self.service.findRoomByName(self.currentBuilding,rname)
-        self.currentRoom=r
-        self.setSensors(r)
+        if not self.currentBuilding is None:
+            print("configureSensorCombo")
+            rname=self.ui.room.currentText()
+            r=self.service.findRoomByName(self.currentBuilding,rname)
+            self.currentRoom=r
+            if not self.currentRoom is None:
+                self.setSensors(r)
+            else:
+                for k in self.currentSensors.keys():
+                    self.currentSensors[k]=None
+
+                for k in self.checkBoxDict.keys():
+                    self.checkBoxDict[k].setVisible(False)
 
 
 
@@ -168,6 +172,7 @@ class ProjectUi(QtWidgets.QMainWindow):
         # self.ui.room.setDisabled(False)
         self.ui.room.clear()
         print("self.ui.floor.currentText()=="+self.ui.floor.currentText()+"self.ui.floor.currentText()")
+
         if not (self.ui.floor.currentText()==None or self.ui.floor.currentText()=="None" or self.ui.floor.currentText()==""):
             try:
                 self.ui.room.addItem("None")
@@ -190,33 +195,25 @@ class ProjectUi(QtWidgets.QMainWindow):
             self.ui.co2.setVisible(False)
             self.ui.light.setVisible(False)
             self.ui.presence.setVisible(False)
-        # self.ui.room.setDisabled(True)
 
     def setSensors(self,room):
-        print("setSensors")
-        # self.ui.sensor.setDisabled(False)
-        # self.ui.sensor.clear()
-        try:
-            # self.ui.sensor.addItem("None")
-            for s in room.getSensors():
-                # self.ui.sensor.addItem(s.name)
-                if s.getName()=="Temperature":
-                    self.ui.temperature.setVisible(True)
-                if s.getName()=="Damp":
-                    self.ui.damp.setVisible(True)
-                if s.getName()=="Co2":
-                    self.ui.co2.setVisible(True)
-                if s.getName()=="Light":
-                    self.ui.light.setVisible(True)
-                if s.getName() == "Presence":
-                    self.ui.presence.setVisible(True)
-        except:#if room value is None
-            self.ui.temperature.setVisible(False)
-            self.ui.damp.setVisible(False)
-            self.ui.co2.setVisible(False)
-            self.ui.light.setVisible(False)
-            self.ui.presence.setVisible(False)
-            pass
+        if not room is None:
+            print("setSensors")
+            for k in self.checkBoxDict:
+                # if not self.service.findSensorByName(k) is None:
+                self.checkBoxDict[k].setVisible(True)
+
+            # for s in room.getSensors():
+            #     if s.getName()=="Temperature":
+            #         self.ui.temperature.setVisible(True)
+            #     if s.getName()=="Damp":
+            #         self.ui.damp.setVisible(True)
+            #     if s.getName()=="Co2":
+            #         self.ui.co2.setVisible(True)
+            #     if s.getName()=="Light":
+            #         self.ui.light.setVisible(True)
+            #     if s.getName() == "Presence":
+            #         self.ui.presence.setVisible(True)
 
     def initBuildings(self):
         self.ui.building.clear()
