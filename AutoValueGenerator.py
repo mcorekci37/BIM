@@ -11,7 +11,7 @@ def main():
 
     while(True):
         choice = int( input("1 ) Temperature\n"
-                       "2 ) Damp\n"
+                       "2 ) Humidity\n"
                        "3 ) CO2\n"
                        "4 ) Light\n"
                        "5 ) Presense\n"
@@ -25,7 +25,7 @@ def main():
                 tempFile.write(str(random.randint(-30, 30)) + ",")
             tempFile.close()
         elif choice == 2:
-            tempFile = open("data/damp.txt", "w")
+            tempFile = open("data/humidity.txt", "w")
             for x in range(1000):
                 print("2")
                 tempFile.write(str(random.random())[:4] + ",")
@@ -55,7 +55,7 @@ def main():
                 tempFile.write(str(random.randint(-30, 30)) + ",")
             tempFile.close()
 
-            tempFile = open("data/damp.txt", "w")
+            tempFile = open("data/humidity.txt", "w")
             for x in range(1000):
                 print("2")
                 tempFile.write(str(random.random()) + ",")

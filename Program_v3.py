@@ -29,21 +29,21 @@ class ProjectUi(QtWidgets.QMainWindow):
 
         self.checkBoxDict=dict()
         self.checkBoxDict["Temperature"]=self.ui.temperature
-        self.checkBoxDict["Damp"]=self.ui.damp
+        self.checkBoxDict["Humidity"]=self.ui.humidity
         self.checkBoxDict["Co2"]=self.ui.co2
         self.checkBoxDict["Light"]=self.ui.light
         self.checkBoxDict["Presence"]=self.ui.presence
 
         self.currentSensors=dict()
         self.currentSensors["Temperature"]=None
-        self.currentSensors["Damp"]=None
+        self.currentSensors["Humidity"]=None
         self.currentSensors["Co2"]=None
         self.currentSensors["Light"]=None
         self.currentSensors["Presence"]=None
 
         self.sensorLogAssosication=dict()
         self.sensorLogAssosication["Temperature"]=self.ui.tempLog
-        self.sensorLogAssosication["Damp"]=self.ui.dampLog
+        self.sensorLogAssosication["Humidity"]=self.ui.humidityLog
         self.sensorLogAssosication["Co2"]=self.ui.co2Log
         self.sensorLogAssosication["Light"]=self.ui.lightLog
         self.sensorLogAssosication["Presence"]=self.ui.presenceLog
@@ -143,7 +143,7 @@ class ProjectUi(QtWidgets.QMainWindow):
             else:#if building value is None
                 self.ui.floor.setDisabled(True)
                 self.ui.temperature.setVisible(False)
-                self.ui.damp.setVisible(False)
+                self.ui.humidity.setVisible(False)
                 self.ui.co2.setVisible(False)
                 self.ui.light.setVisible(False)
                 self.ui.presence.setVisible(False)
@@ -182,7 +182,7 @@ class ProjectUi(QtWidgets.QMainWindow):
             except:#if building value is None
                 self.ui.room.setDisabled(True)
                 self.ui.temperature.setVisible(False)
-                self.ui.damp.setVisible(False)
+                self.ui.humidity.setVisible(False)
                 self.ui.co2.setVisible(False)
                 self.ui.light.setVisible(False)
                 self.ui.presence.setVisible(False)
@@ -191,7 +191,7 @@ class ProjectUi(QtWidgets.QMainWindow):
             self.ui.room.addItem("None")
             self.ui.room.setDisabled(True)
             self.ui.temperature.setVisible(False)
-            self.ui.damp.setVisible(False)
+            self.ui.humidity.setVisible(False)
             self.ui.co2.setVisible(False)
             self.ui.light.setVisible(False)
             self.ui.presence.setVisible(False)
@@ -206,8 +206,8 @@ class ProjectUi(QtWidgets.QMainWindow):
             # for s in room.getSensors():
             #     if s.getName()=="Temperature":
             #         self.ui.temperature.setVisible(True)
-            #     if s.getName()=="Damp":
-            #         self.ui.damp.setVisible(True)
+            #     if s.getName()=="Humidity":
+            #         self.ui.humidity.setVisible(True)
             #     if s.getName()=="Co2":
             #         self.ui.co2.setVisible(True)
             #     if s.getName()=="Light":
@@ -223,7 +223,7 @@ class ProjectUi(QtWidgets.QMainWindow):
         self.ui.floor.setDisabled(True)
         self.ui.room.setDisabled(True)
         self.ui.temperature.setVisible(False)
-        self.ui.damp.setVisible(False)
+        self.ui.humidity.setVisible(False)
         self.ui.co2.setVisible(False)
         self.ui.light.setVisible(False)
         self.ui.presence.setVisible(False)
@@ -241,7 +241,7 @@ class ProjectUi(QtWidgets.QMainWindow):
         print("configureButton")
         # sname=self.ui.sensor.currentText()
         temperatureStat=self.ui.temperature.isChecked()
-        dampStat=self.ui.temperature.isChecked()
+        humidityStat=self.ui.temperature.isChecked()
         co2Stat=self.ui.temperature.isChecked()
         lightStat=self.ui.temperature.isChecked()
         presenceStat=self.ui.temperature.isChecked()
@@ -254,9 +254,9 @@ class ProjectUi(QtWidgets.QMainWindow):
             if temperatureStat:
                 self.service.findSensorByName(self.currentBuilding,self.currentRoom,"Temperature")
                 self.currentSensors["Temperature"] = True
-            if dampStat:
-                self.service.findSensorByName(self.currentBuilding,self.currentRoom,"Damp")
-                self.currentSensors["Damp"] = True
+            if humidityStat:
+                self.service.findSensorByName(self.currentBuilding,self.currentRoom,"Humidity")
+                self.currentSensors["Humidity"] = True
             if co2Stat:
                 self.service.findSensorByName(self.currentBuilding,self.currentRoom,"Co2")
                 self.currentSensors["Co2"] = True
@@ -293,11 +293,11 @@ class ProjectUi(QtWidgets.QMainWindow):
         else:
             self.currentSensors["Temperature"]=None
 
-        if self.ui.damp.isChecked():
-            tempS=self.service.findSensorByName(self.currentBuilding,self.currentRoom.getName(),"Damp")
-            self.currentSensors["Damp"]=tempS
+        if self.ui.humidity.isChecked():
+            tempS=self.service.findSensorByName(self.currentBuilding,self.currentRoom.getName(),"Humidity")
+            self.currentSensors["Humidity"]=tempS
         else:
-            self.currentSensors["Damp"]=None
+            self.currentSensors["Humidity"]=None
 
         if self.ui.co2.isChecked():
             tempS=self.service.findSensorByName(self.currentBuilding,self.currentRoom.getName(),"Co2")
@@ -330,7 +330,7 @@ class ProjectUi(QtWidgets.QMainWindow):
                     self.sensorLogAssosication[k].clear()
 
             # self.ui.tempLog.append("> " +  self.currentSensors["Temperature"].last1000values[i] )
-            # self.ui.dampLog.append("> " +  self.currentSensors["Damp"].last1000values[i][:4] )
+            # self.ui.humidityLog.append("> " +  self.currentSensors["Humidity"].last1000values[i][:4] )
             # self.ui.co2Log.append("> " +  self.currentSensors["Co2"].last1000values[i] )
             # self.ui.lightLog.append("> " +  self.currentSensors["Light"].last1000values[i] )
             # self.ui.presenceLog.append("> " +  self.currentSensors["Presence"].last1000values[i] )
@@ -480,8 +480,8 @@ class Service:
         self.initValuesForSensor("temperature",s)
         room.addSensor(s)
 
-        s=Sensor("Damp",2001,"damp")
-        self.initValuesForSensor("damp",s)
+        s=Sensor("Humidity",2001,"humidity")
+        self.initValuesForSensor("humidity",s)
         room.addSensor(s)
 
         s=Sensor("Co2",3001,"co2")
@@ -507,10 +507,10 @@ class Service:
         l=line.split(",")
         self.database["temperature"]=l
 
-        tempFile=open("./data/damp.txt","r")
+        tempFile=open("./data/humidity.txt","r")
         line=tempFile.readline()
         l=line.split(",")
-        self.database["damp"]=l
+        self.database["humidity"]=l
 
         tempFile=open("./data/co2.txt","r")
         line=tempFile.readline()

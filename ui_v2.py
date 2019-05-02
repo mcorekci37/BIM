@@ -71,9 +71,9 @@ class Ui_MainWindow(object):
         self.roomText = QtWidgets.QTextEdit(self.centralwidget)
         self.roomText.setGeometry(QtCore.QRect(490, 230, 71, 41))
         self.roomText.setObjectName("roomText")
-        self.dampLog = QtWidgets.QTextBrowser(self.centralwidget)
-        self.dampLog.setGeometry(QtCore.QRect(110, 400, 81, 121))
-        self.dampLog.setObjectName("dampLog")
+        self.humidityLog = QtWidgets.QTextBrowser(self.centralwidget)
+        self.humidityLog.setGeometry(QtCore.QRect(110, 400, 81, 121))
+        self.humidityLog.setObjectName("humidityLog")
         self.co2Log = QtWidgets.QTextBrowser(self.centralwidget)
         self.co2Log.setGeometry(QtCore.QRect(200, 400, 81, 121))
         self.co2Log.setObjectName("co2Log")
@@ -91,14 +91,14 @@ class Ui_MainWindow(object):
         font.setWeight(50)
         self.tempText.setFont(font)
         self.tempText.setObjectName("tempText")
-        self.dampText = QtWidgets.QTextEdit(self.centralwidget)
-        self.dampText.setGeometry(QtCore.QRect(110, 360, 81, 31))
+        self.humidityText = QtWidgets.QTextEdit(self.centralwidget)
+        self.humidityText.setGeometry(QtCore.QRect(110, 360, 81, 31))
         font = QtGui.QFont()
         font.setPointSize(8)
         font.setBold(False)
         font.setWeight(50)
-        self.dampText.setFont(font)
-        self.dampText.setObjectName("dampText")
+        self.humidityText.setFont(font)
+        self.humidityText.setObjectName("humidityText")
         self.co2Text = QtWidgets.QTextEdit(self.centralwidget)
         self.co2Text.setGeometry(QtCore.QRect(200, 360, 81, 31))
         font = QtGui.QFont()
@@ -126,9 +126,9 @@ class Ui_MainWindow(object):
         self.temperature = QtWidgets.QCheckBox(self.centralwidget)
         self.temperature.setGeometry(QtCore.QRect(490, 390, 111, 20))
         self.temperature.setObjectName("temperature")
-        self.damp = QtWidgets.QCheckBox(self.centralwidget)
-        self.damp.setGeometry(QtCore.QRect(600, 390, 81, 20))
-        self.damp.setObjectName("damp")
+        self.humidity = QtWidgets.QCheckBox(self.centralwidget)
+        self.humidity.setGeometry(QtCore.QRect(600, 390, 81, 20))
+        self.humidity.setObjectName("humidity")
         self.co2 = QtWidgets.QCheckBox(self.centralwidget)
         self.co2.setGeometry(QtCore.QRect(490, 410, 81, 20))
         self.co2.setObjectName("co2")
@@ -199,11 +199,11 @@ class Ui_MainWindow(object):
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Temperature</p></body></html>"))
-        self.dampText.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        self.humidityText.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Damp</p></body></html>"))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Humidity</p></body></html>"))
         self.co2Text.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -220,7 +220,7 @@ class Ui_MainWindow(object):
 "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Presence</p></body></html>"))
         self.temperature.setText(_translate("MainWindow", "Temperature"))
-        self.damp.setText(_translate("MainWindow", "Damp"))
+        self.humidity.setText(_translate("MainWindow", "Humidity"))
         self.co2.setText(_translate("MainWindow", "Co2"))
         self.light.setText(_translate("MainWindow", "Light"))
         self.presence.setText(_translate("MainWindow", "Presence"))
