@@ -163,7 +163,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Building Information Modeling"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "ReTiMoS"))
         self.building.setCurrentText(_translate("MainWindow", "deneme1"))
         self.building.setItemText(0, _translate("MainWindow", "deneme1"))
         self.building.setItemText(1, _translate("MainWindow", "deneme2"))

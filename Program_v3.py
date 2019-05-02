@@ -64,7 +64,8 @@ class ProjectUi(QtWidgets.QMainWindow):
 
             if bname=="GSU":
                 # self.ui.myWindow.setPixmap(QtGui.QPixmap("./floor_sized.jpg"))
-                self.ui.myWindow.setPixmap(QtGui.QPixmap("./gsu_sized.jpg"))
+                # self.ui.myWindow.setPixmap(QtGui.QPixmap("./gsu_sized.jpg"))
+                self.ui.myWindow.setPixmap(QtGui.QPixmap("./gsu_onyuz_sized.jpg"))
                 self.ui.myLog.setText("Galatasaray University")
             elif bname=="INSA":
                 self.ui.myWindow.setPixmap(QtGui.QPixmap("./insa_sized.jpg"))
@@ -98,7 +99,7 @@ class ProjectUi(QtWidgets.QMainWindow):
             bname=b.getName()
             if not self.ui.floor.currentText()=="None":
                 if bname=="GSU":
-                    self.ui.myWindow.setPixmap(QtGui.QPixmap("./gsu_plan_sized.jpg"))
+                    self.ui.myWindow.setPixmap(QtGui.QPixmap("./gsu_kat2_sized.jpg"))
                     self.ui.myLog.setText("Galatasaray University")
                 elif bname=="INSA":
                     self.ui.myWindow.setPixmap(QtGui.QPixmap("./floor_sized.jpg"))
@@ -122,7 +123,8 @@ class ProjectUi(QtWidgets.QMainWindow):
 
                 if bname=="GSU":
                     # self.ui.myWindow.setPixmap(QtGui.QPixmap("./floor_sized.jpg"))
-                    self.ui.myWindow.setPixmap(QtGui.QPixmap("./gsu_sized.jpg"))
+                    # self.ui.myWindow.setPixmap(QtGui.QPixmap("./gsu_sized.jpg"))
+                    self.ui.myWindow.setPixmap(QtGui.QPixmap("./gsu_onyuz_sized.jpg"))
                     self.ui.myLog.setText("Galatasaray University")
                 elif bname=="INSA":
                     self.ui.myWindow.setPixmap(QtGui.QPixmap("./insa_sized.jpg"))
